@@ -10,7 +10,7 @@ export class UserEntity extends BaseEntity {
     @Column('boolean', {
         nullable: false,
         default: false,
-        select: false
+        select: false,
     })
     deleted: boolean;
 

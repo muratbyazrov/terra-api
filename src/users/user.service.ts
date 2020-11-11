@@ -1,29 +1,48 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
+import { CreateUserDto } from "./create.user.dto";
 import { UserEntity } from "./user.entity";
 
 @Injectable()
 export class UserService {
-    
-    private readonly users: UserEntity[] = []
 
-    findAll(): string {
-        return `найти всех пользователей`
+    async findAll() {
+        try {
+            return UserEntity.find()
+        } catch (err) {
+            throw new HttpException(err.message, 400);
+        }
     }
 
-    findOne(id: string):string {
-        return `найти одного пользователя по id: ${id}`
+    findOne(id) {
+        try {
+            return UserEntity.findOne(id)
+        } catch (err) {
+            throw new HttpException(err.message, 400);
+        }
     }
-          
+
     create(user: UserEntity) {
-        return user.save()
+        try {
+            return user.save()
+        } catch (err) {
+            throw new HttpException(err.message, 400);
+        }
     }
 
-    update(id: string): string {
-        return `обновить пользователя с id ${id}`
+    async update(id: string, body: CreateUserDto) {
+        try {
+            return await UserEntity.update(id, body)
+        } catch (err) {
+            throw new HttpException(err.message, 400);
+        }
     }
 
-    delete(id: string):string {
-        return `удалить пользователя с id ${id}`
-    }    
-    
+    async delete(id: string) {
+        try {
+            return await UserEntity.update(id, { deleted: true })
+        } catch (err) {
+            throw new HttpException(err.message, 400);
+        }
+    }
+
 }
