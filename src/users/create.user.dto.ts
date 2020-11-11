@@ -1,18 +1,21 @@
-import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export class CreateUserDto {
 
     @IsNotEmpty({
         message: 'Имя пользователя не может быть пустым'
     })
-    @MinLength(6, {
-        message: 'Минимальная длина пароля пользователя 6 символов'
+    @MinLength(2, {
+        message: 'Имя должно содержать хотя бы 2 символа'
     })
     firstName: string;
 
     @IsOptional()
     @IsString({
-        message: 'Некорректно заполнено поле Отчество'
+        message: 'Некорректно заполнено поле Фамилия'
+    })
+    @MinLength(2, {
+        message: 'Фамилия должна содержать хотя бы 2 символа'
     })
     lastName: string;
 
@@ -30,10 +33,7 @@ export class CreateUserDto {
     password: string;
 
     @IsOptional()
-    @IsDate({
-        message: 'Некорректно введена дата рождения'
-    })
-    birthday: number;
+    birthday: Date;
 
     @IsOptional()
     @IsString({

@@ -36,7 +36,7 @@ export class UserEntity extends BaseEntity {
     })
     lastName: string;
 
-    @Column('timestamp without time zone', {
+    @Column('date', {
         nullable: true,
         default: null,
       })
