@@ -32,3 +32,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/src/auth
+/src/guards/jwt.auth.guard.ts
+/src/guards/local.auth.guards.ts

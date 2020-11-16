@@ -18,7 +18,7 @@ import { UserModule } from './users/user.module';
       database: 'terraDB',
       entities: [UserEntity],
       synchronize: true,
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
