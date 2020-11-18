@@ -1,15 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { JwtGuard } from "src/guards/jwt.guard";
 import { DeleteResult, UpdateResult } from "typeorm";
-import { CreateUserDto } from "./create.user.dto";
-import { UserEntity } from "./user.entity";
-import { UserLoginDto } from "./user.login.dto";
-import { UserService } from "./user.service";
+import { CreateUserDto } from "../dto/create.user.dto";
+import { UserEntity } from "../entity/user.entity";
+import { UserLoginDto } from "../dto/user.login.dto";
+import { UserService } from "../service/user.service";
 
 @Controller('user')
-export class UserControoler {
+export class UserController {
     constructor(private userService: UserService) {}
 
     @Get()
+    @UseGuards(JwtGuard)
     async findAll(): Promise<UserEntity[]> {
         return this.userService.findAll()
     }
