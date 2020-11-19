@@ -16,7 +16,6 @@ export class AccessTokenEntity extends BaseEntity {
 
   @Column('int', {
     nullable: true,
-    select: false,
   })
   expires: number;
 
