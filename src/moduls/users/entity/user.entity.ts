@@ -6,7 +6,7 @@ import { AccessTokenEntity } from './access.token.entity';
 })
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn({
-    type: 'bigint',
+    type: 'int',
   })
   id: number;
 

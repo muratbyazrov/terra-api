@@ -57,7 +57,7 @@ export class UserService {
       throw new UnauthorizedException('Неправльная почта или пароль');
     }
 
-    const expiration = Math.floor(Date.now() / 1000) + 60*60*3; // 3 часа
+    const expiration = Math.floor(Date.now() / 1000) + 60*60*24*7; // 7 дней
 
     const tokenData = {
       exp: expiration,

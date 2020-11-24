@@ -1,12 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { AccessTokenEntity } from '../moduls/users/entity/access.token.entity';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  async canActivate(
-    context: ExecutionContext,
-  ) {
+  async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
 
     if (!request.headers.authorization && !request.query.token) {
