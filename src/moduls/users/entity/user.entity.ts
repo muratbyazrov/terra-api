@@ -71,6 +71,11 @@ export class UserEntity extends BaseEntity {
   })
   avatar: any;
 
+  @Column('text', {
+    nullable: true,
+  })
+  about: string;
+
   @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user)
   tokens: AccessTokenEntity[];
 }

@@ -57,6 +57,12 @@ export class CreateUserDto {
     @IsString({
         message: 'Некорректно заполнено поле Адрес'
     })
-    adress: string;
+    address: string;
+
+    @IsOptional()
+    @IsString({
+        message: 'Некорректно заполнено поле $property'
+    })
+    about: string;
 
 }
