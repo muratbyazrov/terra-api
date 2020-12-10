@@ -73,9 +73,10 @@ export class UserEntity extends BaseEntity {
 
   @Column('text', {
     nullable: true,
+    default: 'Расскажите что-нибудь примечательно о себе'
   })
   about: string;
 
-  @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user)
+  @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user, {cascade: true})
   tokens: AccessTokenEntity[];
 }

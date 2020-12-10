@@ -22,7 +22,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async findCurrentUser(@Headers() headers) {
     const userData: any = await jwt.decode(headers.authorization);
-    return this.userService.findOne(userData.id)
+    return this.userService.findOne(userData.id);
   }
 
   @Get(':id')
@@ -33,6 +33,7 @@ export class UserController {
 
   @Post()
   async create(@Body() body: CreateUserDto): Promise<UserEntity> {
+    console.log(body);
     return await this.userService.create(UserEntity.create(body));
   }
 
