@@ -52,16 +52,19 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
+    default: 'Страна на Земле'
   })
   country: string;
 
   @Column('character varying', {
     nullable: true,
+    default: 'Город на Земле'
   })
   town: string;
 
   @Column('character varying', {
     nullable: true,
+    default: 'Какой-то адрес на Земле'
   })
   address: string;
 
