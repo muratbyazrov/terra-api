@@ -6,6 +6,7 @@ import { UserEntity } from '../entity/user.entity';
 import { UserLoginDto } from '../dto/user.login.dto';
 import { UserService } from '../service/user.service';
 import jwt = require('jsonwebtoken');
+import { UpdateUserDto } from '../dto/update.user.dto';
 
 @Controller('user')
 export class UserController {
@@ -44,7 +45,7 @@ export class UserController {
 
   @Put(':id')
   @UseGuards(JwtGuard)
-  async update(@Param('id') id: string, @Body() body: CreateUserDto): Promise<UpdateResult> {
+  async update(@Param('id') id: string, @Body() body: UpdateUserDto): Promise<UpdateResult> {
     return this.userService.update(id, body);
   }
 
