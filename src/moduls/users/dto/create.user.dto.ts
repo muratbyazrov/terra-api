@@ -7,7 +7,6 @@ export class CreateUserDto {
     })
     firstName: string;
 
-    @IsOptional()
     @MinLength(2, {
         message: 'Фамилия должна содержать хотя бы 2 символа'
     })

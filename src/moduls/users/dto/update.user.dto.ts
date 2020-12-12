@@ -9,4 +9,10 @@ export class UpdateUserDto extends CreateUserDto {
   @IsOptional()
   password: string;
 
+  @IsOptional()
+  lastName: string;
+
+  @IsOptional()
+  firstName: string;
+
 }
