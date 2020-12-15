@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Headers, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Param,
+  Post,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreateUserDto } from '../dto/create.user.dto';
@@ -7,6 +19,7 @@ import { UserLoginDto } from '../dto/user.login.dto';
 import { UserService } from '../service/user.service';
 import jwt = require('jsonwebtoken');
 import { UpdateUserDto } from '../dto/update.user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
@@ -34,7 +47,6 @@ export class UserController {
 
   @Post()
   async create(@Body() body: CreateUserDto): Promise<UserEntity> {
-    console.log(body);
     return await this.userService.create(UserEntity.create(body));
   }
 
@@ -45,8 +57,12 @@ export class UserController {
 
   @Put(':id')
   @UseGuards(JwtGuard)
-  async update(@Param('id') id: string, @Body() body: UpdateUserDto): Promise<UpdateResult> {
-    return this.userService.update(id, body);
+  @UseInterceptors(FileInterceptor('avatar', {
+    dest: 'uploads/',
+    preservePath: true,
+  }))
+  async update(@Param('id') id: string, @Body() body: UpdateUserDto, @UploadedFile() avatar): Promise<UpdateResult> {
+    return this.userService.update(id, body, avatar);
   }
 
   @Delete(':id')

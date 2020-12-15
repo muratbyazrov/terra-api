@@ -6,10 +6,12 @@ import { AppService } from './app.service';
 import { UserEntity } from '../users/entity/user.entity';
 import { UserModule } from '../users/user.module';
 import { AccessTokenEntity } from '../users/entity/access.token.entity';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
     UserModule,
+    FilesModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return {

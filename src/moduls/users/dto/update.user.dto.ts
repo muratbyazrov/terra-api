@@ -15,4 +15,7 @@ export class UpdateUserDto extends CreateUserDto {
   @IsOptional()
   firstName: string;
 
+  @IsOptional()
+  avatar: any;
+
 }

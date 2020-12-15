@@ -36,3 +36,5 @@ lerna-debug.log*
 /src/auth
 /src/guards/jwt.auth.guard.ts
 /src/guards/local.auth.guards.ts
+
+/uploads

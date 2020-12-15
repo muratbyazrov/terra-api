@@ -76,7 +76,7 @@ export class UserEntity extends BaseEntity {
 
   @Column('text', {
     nullable: true,
-    default: 'Расскажите что-нибудь примечательно о себе'
+    default: null
   })
   about: string;
 

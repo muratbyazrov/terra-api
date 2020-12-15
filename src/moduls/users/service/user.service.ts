@@ -1,8 +1,8 @@
 import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create.user.dto';
 import { UserEntity } from '../entity/user.entity';
 import jwt = require('jsonwebtoken');
 import { AccessTokenEntity } from '../entity/access.token.entity';
+import { UpdateUserDto } from '../dto/update.user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,9 +15,9 @@ export class UserService {
     }
   }
 
-  findOne(id) {
+  async findOne(id) {
     try {
-      return UserEntity.findOne(id);
+      return await UserEntity.findOne(id);
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
@@ -31,9 +31,16 @@ export class UserService {
     }
   }
 
-  async update(id: string, body: CreateUserDto) {
+  async update(id: string, body: UpdateUserDto, avatar) {
     try {
-      return await UserEntity.update(id, body);
+      if (avatar) {
+        const avatarObject = {
+          avatar: avatar,
+        };
+        await UserEntity.update(id, avatarObject);
+      } else {
+        return await UserEntity.update(id, body);
+      }
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
