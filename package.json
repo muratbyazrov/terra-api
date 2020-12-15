@@ -25,11 +25,13 @@
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/typeorm": "^7.1.4",
+    "axios": "^0.21.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "cookie-parser": "^1.4.5",
     "fastify-session": "^5.2.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "nestjs-session": "^1.0.1",
     "pg": "^8.4.2",
@@ -37,7 +39,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
-    "typeorm": "^0.2.29"
+    "typeorm": "^0.2.29",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",

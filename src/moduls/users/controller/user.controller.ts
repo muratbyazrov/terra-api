@@ -58,7 +58,7 @@ export class UserController {
   @Put(':id')
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('avatar', {
-    dest: 'uploads/',
+    dest: 'uploads/avatars',
     preservePath: true,
   }))
   async update(@Param('id') id: string, @Body() body: UpdateUserDto, @UploadedFile() avatar): Promise<UpdateResult> {

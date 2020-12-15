@@ -3,6 +3,7 @@ import { UserEntity } from '../entity/user.entity';
 import jwt = require('jsonwebtoken');
 import { AccessTokenEntity } from '../entity/access.token.entity';
 import { UpdateUserDto } from '../dto/update.user.dto';
+import { logger } from '../../logger/logger';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,7 @@ export class UserService {
     try {
       return UserEntity.find();
     } catch (err) {
+      logger.error(err);
       throw new HttpException(err.message, 400);
     }
   }
@@ -19,6 +21,7 @@ export class UserService {
     try {
       return await UserEntity.findOne(id);
     } catch (err) {
+      logger.error(err);
       throw new HttpException(err.message, 400);
     }
   }
@@ -27,6 +30,7 @@ export class UserService {
     try {
       return user.save();
     } catch (err) {
+      logger.error(err);
       throw new HttpException(err.message, 400);
     }
   }
@@ -42,6 +46,7 @@ export class UserService {
         return await UserEntity.update(id, body);
       }
     } catch (err) {
+      logger.error(err);
       throw new HttpException(err.message, 400);
     }
   }
@@ -50,6 +55,7 @@ export class UserService {
     try {
       return await UserEntity.delete(id);
     } catch (err) {
+      logger.error(err);
       throw new HttpException(err.message, 400);
     }
   }

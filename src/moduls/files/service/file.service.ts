@@ -3,8 +3,10 @@ import * as path from 'path';
 
 @Injectable()
 export class FileService {
-  async getAvatar(res) {
+  async getAvatar(res, fileName) {
+    //проверить, есть ли у этого пользоватля такой аватора
     res.set('Content-Type', 'image/png');
-    await res.sendFile(path.join(__dirname, '../../../../uploads', '2adb4ab675514e214235f82be65fceab'));
+    await res.sendFile(path.join(__dirname, '../../../../uploads/avatars', `${fileName}`));
+    // ужадить старый аватар
   }
 }
