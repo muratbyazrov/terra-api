@@ -89,6 +89,9 @@ export class UserService {
     t.token = result.token;
     t.expires = tokenData.exp;
     t.user = user;
+
+    await AccessTokenEntity.query(`DELETE FROM security.access_token WHERE user_id = ${user.id}`);
+
     await AccessTokenEntity.save(t);
 
     return { user, token: result.token };

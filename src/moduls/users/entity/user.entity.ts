@@ -41,7 +41,7 @@ export class UserEntity extends BaseEntity {
 
   @Column('date', {
     nullable: true,
-    default: null,
+    default: "2000-01-01",
   })
   birthday: Date;
 
@@ -52,34 +52,44 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
-    default: 'Страна на Земле'
+    default: 'Страна на Земле',
   })
   country: string;
 
   @Column('character varying', {
     nullable: true,
-    default: 'Город на Земле'
+    default: 'Город на Земле',
   })
   town: string;
 
   @Column('character varying', {
     nullable: true,
-    default: 'Какой-то адрес на Земле'
+    default: 'Какой-то адрес на Земле',
   })
   address: string;
 
   @Column('json', {
     nullable: true,
-    default: null,
+    default: {
+      'fieldname': 'avatar',
+      'originalname': 'av1.png',
+      'encoding': '7bit',
+      'mimetype': 'image/png',
+      'destination': 'uploads/avatars',
+      'filename': '8a12062fb6f4c53a621e0961c45dd04b',
+      'path': 'uploads\\avatars\\av1.png',
+      'size': 74623,
+    },
   })
   avatar: any;
 
+
   @Column('text', {
     nullable: true,
-    default: null
+    default: "Расскажите что-нибудь примечательное о себе",
   })
   about: string;
 
-  @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user, {cascade: true})
+  @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user, { cascade: true })
   tokens: AccessTokenEntity[];
 }
