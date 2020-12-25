@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AccessTokenEntity } from './access.token.entity';
+import { BookEntity } from '../../books/book.entity';
 
 @Entity('user', {
   schema: 'security',
@@ -92,4 +93,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => AccessTokenEntity, accessToken => accessToken.user, { cascade: true })
   tokens: AccessTokenEntity[];
+
+  @OneToMany(() => BookEntity, books => books.creator)
+  books: BookEntity[];
 }
