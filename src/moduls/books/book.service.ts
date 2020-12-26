@@ -1,8 +1,15 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { BookEntity } from './book.entity';
+import { UserService } from '../users/service/user.service';
+import { REQUEST } from '@nestjs/core';
 
 @Injectable()
 export class BookService {
+  constructor(
+    private readonly userService: UserService,
+    @Inject(REQUEST) private readonly request
+  ) {
+  }
 
   async find() {
     try {
@@ -22,6 +29,7 @@ export class BookService {
 
   async create(book) {
     try {
+      //book.creator = this.userService.findOne(th);
       return book.save();
     } catch (err) {
       throw new HttpException(err.message, 400);

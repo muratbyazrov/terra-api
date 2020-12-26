@@ -2,7 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './moduls/app/app.module';
 import * as cookieParser from 'cookie-parser';
-import { AppLogger, logger } from './moduls/logger/logger';
+import { AppLogger } from './moduls/logger/logger';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const corsOptions = {
@@ -13,6 +14,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new AppLogger(),
   });
+  app.use(
+    session({
+      secret: 'super-secret',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   app.enableCors(corsOptions);
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());

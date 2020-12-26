@@ -28,8 +28,8 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async findAll(): Promise<UserEntity[]> {
-    return this.userService.findAll();
+  async find(): Promise<UserEntity[]> {
+    return this.userService.find();
   }
 
   @Get('me')

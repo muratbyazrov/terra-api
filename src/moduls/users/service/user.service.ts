@@ -8,7 +8,7 @@ import { logger } from '../../logger/logger';
 @Injectable()
 export class UserService {
 
-  async findAll() {
+  async find() {
     try {
       return UserEntity.find();
     } catch (err) {
