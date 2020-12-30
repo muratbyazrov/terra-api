@@ -6,7 +6,7 @@ import {
   Headers,
   Param,
   Post,
-  Put,
+  Put, Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -51,8 +51,10 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() login: UserLoginDto) {
-    return this.userService.login(login);
+  async login(@Body() login: UserLoginDto, @Request() request) {
+    const userLogin = await this.userService.login(login);
+    request.session.user = userLogin.user;
+    return userLogin;
   }
 
   @Put(':id')

@@ -7,13 +7,14 @@ import { REQUEST } from '@nestjs/core';
 export class BookService {
   constructor(
     private readonly userService: UserService,
-    @Inject(REQUEST) private readonly request
+    @Inject(REQUEST) private readonly request,
   ) {
   }
 
   async find() {
     try {
       return await BookEntity.find();
+
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
@@ -29,7 +30,8 @@ export class BookService {
 
   async create(book) {
     try {
-      //book.creator = this.userService.findOne(th);
+      book.creator = await this.userService.findOne(this.request.session.user.id);
+      book.created = new Date();
       return book.save();
     } catch (err) {
       throw new HttpException(err.message, 400);

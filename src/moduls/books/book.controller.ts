@@ -12,7 +12,7 @@ export class BookController {
   }
 
   @Get()
-  @UseGuards(JwtGuard)
+  //@UseGuards(JwtGuard)
   async find(): Promise<BookEntity[]> {
     return this.bookService.find();
   }
@@ -24,16 +24,19 @@ export class BookController {
   }
 
   @Post()
+  @UseGuards(JwtGuard)
   async create(@Body() body: CreateBookDto): Promise<BookEntity> {
     return this.bookService.create(BookEntity.create(body));
   }
 
   @Put('id')
+  @UseGuards(JwtGuard)
   async update(@Param('id') id: number, @Body() body: UpdateBookDto): Promise<UpdateResult> {
     return this.bookService.update(id, body);
   }
 
   @Delete('id')
+  @UseGuards(JwtGuard)
   async delete(@Param('id') id: number): Promise<UpdateResult> {
     return this.bookService.delete(id);
   }
