@@ -12,7 +12,7 @@ export class BookController {
   }
 
   @Get()
-  //@UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   async find(): Promise<BookEntity[]> {
     return this.bookService.find();
   }
