@@ -9,12 +9,15 @@ import { AccessTokenEntity } from '../users/entity/access.token.entity';
 import { FilesModule } from '../files/files.module';
 import { BookEntity } from '../books/book.entity';
 import { BookModule } from '../books/book.module';
+import { MessageModule } from '../messages/message.module';
+import { MessageEntity } from '../messages/message.entity';
 
 @Module({
   imports: [
     UserModule,
     FilesModule,
     BookModule,
+    MessageModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return {
@@ -25,7 +28,7 @@ import { BookModule } from '../books/book.module';
           username: 'postgres',
           password: 'byazrov127214315',
           database: 'terraDB',
-          entities: [UserEntity, AccessTokenEntity, BookEntity],
+          entities: [UserEntity, AccessTokenEntity, BookEntity, MessageEntity],
           synchronize: true,
         };
       },

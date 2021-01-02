@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AccessTokenEntity } from './access.token.entity';
 import { BookEntity } from '../../books/book.entity';
+import { MessageEntity } from '../../messages/message.entity';
 
 @Entity('user', {
   schema: 'security',
@@ -42,7 +43,7 @@ export class UserEntity extends BaseEntity {
 
   @Column('date', {
     nullable: true,
-    default: "2000-01-01",
+    default: '2000-01-01',
   })
   birthday: Date;
 
@@ -87,7 +88,7 @@ export class UserEntity extends BaseEntity {
 
   @Column('text', {
     nullable: true,
-    default: "Расскажите что-нибудь примечательное о себе",
+    default: 'Расскажите что-нибудь примечательное о себе',
   })
   about: string;
 
@@ -96,4 +97,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => BookEntity, books => books.creator)
   books: BookEntity[];
+
+  @OneToMany(() => MessageEntity, message => message.creator)
+  message: MessageEntity[];
 }
