@@ -12,14 +12,18 @@ export class MessageService {
   }
 
   async find() {
-    return await MessageEntity.find();
+    return await MessageEntity.find({
+      relations: ['creator', 'recipient']
+    });
   } catch(err) {
     throw new HttpException(err.message, 400);
   }
 
   async findOne(id) {
     try {
-      return await MessageEntity.findOne(id);
+      return await MessageEntity.findOne(id, {
+        relations: ['creator', 'recipient']
+      });
     } catch (err) {
       throw new HttpException(err.message, 400);
     }

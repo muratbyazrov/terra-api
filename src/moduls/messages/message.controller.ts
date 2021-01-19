@@ -6,7 +6,7 @@ import { UpdateResult } from 'typeorm';
 import { CreateMessageDto } from './create.message.dto';
 import { UpdateMessageDto } from './update.message.dto';
 
-@Controller('message')
+@Controller('messages')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {
   }
@@ -15,6 +15,12 @@ export class MessageController {
   @UseGuards(JwtGuard)
   async find(): Promise<MessageEntity[]> {
     return this.messageService.find();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtGuard)
+  async findOne(@Param('id') id: number): Promise<MessageEntity> {
+    return this.messageService.findOne(id);
   }
 
   @Post()
