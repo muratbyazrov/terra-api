@@ -37,7 +37,9 @@ export class MessageEntity extends BaseEntity {
   })
   recipient: UserEntity;
 
-  @Column('date')
+  @Column('timestamp without time zone',{
+    nullable: true
+  })
   created: Date;
 
 }
