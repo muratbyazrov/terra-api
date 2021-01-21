@@ -26,7 +26,8 @@ export class MessageController {
   @Post()
   @UseGuards(JwtGuard)
   async create(@Body() body: CreateMessageDto): Promise<MessageEntity> {
-    return this.messageService.create(MessageEntity.create(body));
+    const { recipientId, ...otherProperty } = body;
+    return this.messageService.create(MessageEntity.create(otherProperty), recipientId);
   }
 
   @Put('id')

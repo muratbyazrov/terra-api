@@ -29,10 +29,11 @@ export class MessageService {
     }
   }
 
-  async create(message) {
+  async create(message, recipientId) {
     try {
       message.creator = await this.userService.findOne(this.request.session.user.id);
       message.created = new Date();
+      message.recipient = await this.userService.findOne(recipientId);
       return message.save();
     } catch (err) {
       throw new HttpException(err.message, 400);

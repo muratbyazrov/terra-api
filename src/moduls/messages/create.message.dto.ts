@@ -1,6 +1,5 @@
-import { IsDefined, IsString } from 'class-validator';
-import { ManyToOne } from 'typeorm';
-import { UserEntity } from '../users/entity/user.entity';
+import { IsNumber, IsString } from 'class-validator';
+
 
 export class CreateMessageDto {
   @IsString({
@@ -8,9 +7,9 @@ export class CreateMessageDto {
   })
   text: string;
 
-  @IsDefined({
-    message: 'Не заполнено поле $property'
+  @IsNumber({}, {
+    message: 'Некорректно заполнено поле $property',
   })
-  recipient: UserEntity;
+  recipientId: number;
 
 }
