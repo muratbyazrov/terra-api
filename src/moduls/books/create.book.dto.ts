@@ -30,4 +30,9 @@ export class CreateBookDto {
   })
   price: number;
 
+  @IsString({
+    message: 'Некорректно заполнено поле $property',
+  })
+  town: string;
+
 }

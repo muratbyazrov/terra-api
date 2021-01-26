@@ -46,6 +46,10 @@ export class BookService {
     }
   }
 
+  async updateBookPhoto(id, bookPhoto) {
+    return await BookEntity.update(id, { photo: bookPhoto });
+  }
+
   async delete(id) {
     try {
       const deletedBook = await this.findOne(id);

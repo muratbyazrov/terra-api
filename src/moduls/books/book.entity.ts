@@ -48,6 +48,11 @@ export class BookEntity extends BaseEntity {
   })
   price: number;
 
+  @Column('character varying', {
+    nullable: false,
+  })
+  town: string;
+
   @ManyToOne(() => UserEntity, (user) => user.books)
   @JoinColumn({
     name: 'creator_id',
