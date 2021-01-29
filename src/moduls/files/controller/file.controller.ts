@@ -12,4 +12,10 @@ export class FileController {
     return this.fileService.getAvatar(res, fileName);
   }
 
+  @Get('bookPhoto/:fileName')
+  getBookPhoto(@Res() res, @Param('fileName') fileName) {
+    return this.fileService.getBookPhoto(res, fileName);
+  }
+
+
 }

@@ -9,4 +9,10 @@ export class FileService {
     await res.sendFile(path.join(__dirname, '../../../../uploads/avatars', `${fileName}`));
     // ужадить старый аватар
   }
+
+
+  async getBookPhoto(res, fileName) {
+    res.set('Content-Type', 'image/png');
+    await res.sendFile(path.join(__dirname, '../../../../uploads/books', `${fileName}`));
+  }
 }

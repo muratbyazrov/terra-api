@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -25,8 +25,8 @@ export class BookController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async find(): Promise<BookEntity[]> {
-    return this.bookService.find();
+  async find(@Query() props): Promise<BookEntity[]> {
+    return this.bookService.find(props);
   }
 
   @Get(':id')

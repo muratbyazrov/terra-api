@@ -11,7 +11,7 @@ export class BookService {
   ) {
   }
 
-  async find() {
+  async find(props) {
     try {
       return await BookEntity.find();
 
