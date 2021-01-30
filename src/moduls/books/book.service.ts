@@ -11,9 +11,20 @@ export class BookService {
   ) {
   }
 
-  async find(props) {
+  async find(activeBookList) {
     try {
-      return await BookEntity.find();
+
+      if (activeBookList === 'other-book') {
+        const books = await BookEntity.find({
+          relations: ['creator']
+        });
+
+        return books.filter(book => book.creator.id !== this.request.session.user.id);
+      }
+
+      if (activeBookList === 'favorite') return await BookEntity.find();
+
+      if (activeBookList === 'my-shop') return await BookEntity.find({ where: { creator: { id: this.request.session.user.id } } });
 
     } catch (err) {
       throw new HttpException(err.message, 400);

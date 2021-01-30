@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AccessTokenEntity } from './access.token.entity';
 import { BookEntity } from '../../books/book.entity';
 import { MessageEntity } from '../../messages/message.entity';
@@ -100,4 +100,23 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => MessageEntity, message => message.creator)
   message: MessageEntity[];
+
+  @ManyToMany(() => BookEntity, (favoriteBooks) => favoriteBooks.users)
+  @JoinTable({
+    name: 'user_favorite_book',
+    joinColumns: [
+      {
+        name: 'user_id',
+        referencedColumnName: 'id',
+      },
+    ],
+    inverseJoinColumns: [
+      {
+        name: 'favorite_book_id',
+        referencedColumnName: 'id',
+      },
+    ],
+    schema: 'security',
+  })
+  favoriteBooks: BookEntity[];
 }

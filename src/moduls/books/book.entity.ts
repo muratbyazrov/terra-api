@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../users/entity/user.entity';
 
 @Entity('book', {
@@ -62,6 +62,9 @@ export class BookEntity extends BaseEntity {
 
   @Column('date')
   created: Date;
+
+  @ManyToMany(() => UserEntity, (users) => users.favoriteBooks)
+  users: UserEntity[];
 
 }
 

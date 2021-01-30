@@ -25,8 +25,8 @@ export class BookController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async find(@Query() props): Promise<BookEntity[]> {
-    return this.bookService.find(props);
+  async find(@Query('activeBookList') activeBookList): Promise<BookEntity[]> {
+    return this.bookService.find(activeBookList);
   }
 
   @Get(':id')
