@@ -12,19 +12,27 @@ export class BookService {
   }
 
   async find(activeBookList) {
+
+    const currentUserId = this.request.session.user.id
+
     try {
 
-      if (activeBookList === 'other-book') {
+      if (activeBookList === 'to-buy') {
         const books = await BookEntity.find({
           relations: ['creator']
         });
 
-        return books.filter(book => book.creator.id !== this.request.session.user.id);
+        return books.filter(book => book.creator.id !== currentUserId);
       }
 
-      if (activeBookList === 'favorite') return await BookEntity.find();
+      if (activeBookList === 'favorite') {
+        const books = await BookEntity.find({
+          relations: ['users']
+        })
+        return books.filter(book => book.users.includes(currentUserId))
+      }
 
-      if (activeBookList === 'my-shop') return await BookEntity.find({ where: { creator: { id: this.request.session.user.id } } });
+      if (activeBookList === 'to-sell') return await BookEntity.find({ where: { creator: { id: currentUserId } } });
 
     } catch (err) {
       throw new HttpException(err.message, 400);
