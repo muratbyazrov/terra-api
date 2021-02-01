@@ -3,7 +3,7 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
+  Param, ParseIntPipe,
   Post,
   Put, Query,
   UploadedFile,
@@ -31,7 +31,7 @@ export class BookController {
 
   @Get(':id')
   @UseGuards(JwtGuard)
-  async findOne(@Param('id') id: number): Promise<BookEntity> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<BookEntity> {
     return this.bookService.findOne(id);
   }
 

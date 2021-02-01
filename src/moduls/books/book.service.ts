@@ -27,9 +27,9 @@ export class BookService {
 
       if (activeBookList === 'favorite') {
         const books = await BookEntity.find({
-          relations: ['users']
+          relations: ['favoriteCreator']
         })
-        return books.filter(book => book.users.includes(currentUserId))
+        return books.filter(book => book.favoriteCreator.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
       }
 
       if (activeBookList === 'to-sell') return await BookEntity.find({ where: { creator: { id: currentUserId } } });
@@ -59,7 +59,9 @@ export class BookService {
 
   async update(id, body) {
     try {
-      return await BookEntity.update(id, body);
+
+      return await BookEntity.query(`INSERT INTO security.user_favorite_book (favorite_book_id, user_id) VALUES (${id}, ${body.favoriteCreator.id})`)
+
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
