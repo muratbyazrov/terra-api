@@ -14,7 +14,7 @@ import { JwtGuard } from '../../guards/jwt.guard';
 import { BookEntity } from './book.entity';
 import { CreateBookDto } from './create.book.dto';
 import { UpdateBookDto } from './update.book.dto';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { BookService } from './book.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -57,9 +57,9 @@ export class BookController {
     return await this.bookService.updateBookPhoto(id, bookPhoto);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @UseGuards(JwtGuard)
-  async delete(@Param('id') id: number): Promise<UpdateResult> {
+  async delete(@Param('id') id: number): Promise<DeleteResult> {
     return this.bookService.delete(id);
   }
 }

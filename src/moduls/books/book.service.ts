@@ -13,13 +13,13 @@ export class BookService {
 
   async find(activeBookList) {
 
-    const currentUserId = this.request.session.user.id
+    const currentUserId = this.request.session.user.id;
 
     try {
 
       if (activeBookList === 'buy-list') {
         const books = await BookEntity.find({
-          relations: ['creator']
+          relations: ['creator'],
         });
 
         return books.filter(book => book.creator.id !== currentUserId);
@@ -27,8 +27,8 @@ export class BookService {
 
       if (activeBookList === 'favorite-list') {
         const books = await BookEntity.find({
-          relations: ['favoriteCreator']
-        })
+          relations: ['favoriteCreator'],
+        });
         return books.filter(book => book.favoriteCreator.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
       }
 
@@ -60,7 +60,7 @@ export class BookService {
   async update(id, body) {
     try {
 
-      return await BookEntity.query(`INSERT INTO security.user_favorite_book (favorite_book_id, user_id) VALUES (${id}, ${body.favoriteCreator.id})`)
+      return await BookEntity.query(`INSERT INTO security.user_favorite_book (favorite_book_id, user_id) VALUES (${id}, ${body.favoriteCreator.id})`);
 
     } catch (err) {
       throw new HttpException(err.message, 400);
@@ -73,10 +73,7 @@ export class BookService {
 
   async delete(id) {
     try {
-      const deletedBook = await this.findOne(id);
-      deletedBook.deleted = true;
-      delete deletedBook.id;
-      return await this.update(id, deletedBook);
+      return await BookEntity.delete(id);
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
