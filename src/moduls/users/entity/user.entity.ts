@@ -101,7 +101,7 @@ export class UserEntity extends BaseEntity {
   @OneToMany(() => MessageEntity, message => message.creator)
   message: MessageEntity[];
 
-  @ManyToMany(() => BookEntity, (favoriteBooks) => favoriteBooks.favoriteCreator)
+@ManyToMany(() => BookEntity, (favoriteBooks) => favoriteBooks.favoriteCreators)
   @JoinTable({
     name: 'user_favorite_book',
     joinColumns: [

@@ -19,7 +19,7 @@ export class BookService {
 
       if (activeBookList === 'buy-list') {
         const books = await BookEntity.find({
-          relations: ['creator'],
+          relations: ['creator', 'favoriteCreators'],
         });
 
         return books.filter(book => book.creator.id !== currentUserId);
@@ -27,12 +27,17 @@ export class BookService {
 
       if (activeBookList === 'favorite-list') {
         const books = await BookEntity.find({
-          relations: ['favoriteCreator'],
+          relations: ['favoriteCreators'],
         });
-        return books.filter(book => book.favoriteCreator.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
+        return books.filter(book => book.favoriteCreators.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
       }
 
-      if (activeBookList === 'sell-list') return await BookEntity.find({ where: { creator: { id: currentUserId } } });
+      if (activeBookList === 'sell-list') {
+        return await BookEntity.find({
+          where: { creator: { id: currentUserId } },
+          relations: ['favoriteCreators'],
+        });
+      }
 
     } catch (err) {
       throw new HttpException(err.message, 400);
@@ -60,7 +65,18 @@ export class BookService {
   async update(id, body) {
     try {
 
-      return await BookEntity.query(`INSERT INTO security.user_favorite_book (favorite_book_id, user_id) VALUES (${id}, ${body.favoriteCreator.id})`);
+      const oldBook: BookEntity = await BookEntity.findOne(id, {
+        relations: ['creator', 'favoriteCreators'],
+      });
+
+      if (body.favoriteCreator && !oldBook.favoriteCreators.map(favoriteCreator => favoriteCreator.id).includes(this.request.session.user.id)) {
+        return await BookEntity.query(`INSERT INTO security.user_favorite_book (favorite_book_id, user_id) VALUES (${id}, ${body.favoriteCreator.id})`);
+      }
+
+      if (body.favoriteCreator && oldBook.favoriteCreators.map(favoriteCreator => favoriteCreator.id).includes(this.request.session.user.id)) {
+        return await BookEntity.query(`DELETE FROM security.user_favorite_book WHERE user_id = ${this.request.session.user.id} AND favorite_book_id = ${id}`);
+      }
+
 
     } catch (err) {
       throw new HttpException(err.message, 400);
@@ -72,6 +88,8 @@ export class BookService {
   }
 
   async delete(id) {
+    //написать проверку, чтобы не удалять чужие книши
+    // прописать удаление фото из базы
     try {
       return await BookEntity.delete(id);
     } catch (err) {

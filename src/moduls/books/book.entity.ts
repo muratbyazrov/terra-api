@@ -64,7 +64,7 @@ export class BookEntity extends BaseEntity {
   created: Date;
 
   @ManyToMany(() => UserEntity, (users) => users.favoriteBooks)
-  favoriteCreator: UserEntity[];
+  favoriteCreators: UserEntity[];
 
 }
 
