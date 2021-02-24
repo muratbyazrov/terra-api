@@ -64,7 +64,6 @@ export class BookService {
 
   async update(id, body) {
     try {
-
       const oldBook: BookEntity = await BookEntity.findOne(id, {
         relations: ['creator', 'favoriteCreators'],
       });
@@ -77,14 +76,19 @@ export class BookService {
         return await BookEntity.query(`DELETE FROM security.user_favorite_book WHERE user_id = ${this.request.session.user.id} AND favorite_book_id = ${id}`);
       }
 
-
+      return await BookEntity.update(id, body);
     } catch (err) {
       throw new HttpException(err.message, 400);
     }
   }
 
   async updateBookPhoto(id, bookPhoto) {
-    return await BookEntity.update(id, { photo: bookPhoto });
+    try {
+      return await BookEntity.update(id, { photo: bookPhoto });
+    } catch (err) {
+      throw new HttpException(err.message, 400);
+    }
+
   }
 
   async delete(id) {
