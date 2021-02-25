@@ -27,7 +27,7 @@ export class BookService {
 
       if (activeBookList === 'favorite-list') {
         const books = await BookEntity.find({
-          relations: ['favoriteCreators'],
+          relations: ['creator', 'favoriteCreators'],
         });
         return books.filter(book => book.favoriteCreators.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
       }
