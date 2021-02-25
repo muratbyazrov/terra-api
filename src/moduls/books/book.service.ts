@@ -35,7 +35,7 @@ export class BookService {
       if (activeBookList === 'sell-list') {
         return await BookEntity.find({
           where: { creator: { id: currentUserId } },
-          relations: ['favoriteCreators'],
+          relations: ['creator', 'favoriteCreators'],
         });
       }
 
