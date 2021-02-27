@@ -12,6 +12,22 @@ export class BookService {
   ) {
   }
 
+  async toFilterBooks(books, filters) {
+    if (filters && filters.town && filters.town !== 'null') {
+      books = books.filter(book => book.town === filters.town);
+    }
+
+    if (filters && filters.genre && filters.genre !== 'null') {
+      books = books.filter(book => book.genre === filters.genre);
+    }
+
+    if (filters && filters.price && filters.price !== 'null') {
+      books = books.filter(book => book.price <= +filters.price);
+    }
+    console.log(filters);
+    return books;
+  }
+
   async find(activeBookList, filters) {
     const currentUserId = this.request.session.user.id;
     try {
@@ -19,34 +35,28 @@ export class BookService {
         let books = await BookEntity.find({
           relations: ['creator', 'favoriteCreators'],
         });
-
-        if (filters && filters.town) {
-          books = books.filter(book => book.town === filters.town);
-        }
-
-        if (filters && filters.genre) {
-          books = books.filter(book => book.genre === filters.genre);
-        }
-
-        if (filters && filters.price) {
-          books = books.filter(book => book.price <= +filters.price);
-        }
+        books = await this.toFilterBooks(books, filters);
 
         return books.filter(book => book.creator.id !== currentUserId);
       }
 
       if (activeBookList === BookListNameEnum.BOOKINIST_LIST_FAVORITE) {
-        const books = await BookEntity.find({
+        let books = await BookEntity.find({
           relations: ['creator', 'favoriteCreators'],
         });
+        books = await this.toFilterBooks(books, filters);
+
         return books.filter(book => book.favoriteCreators.map(bookFavoriteCreator => bookFavoriteCreator.id).includes(currentUserId));
       }
 
       if (activeBookList === BookListNameEnum.BOOKINIST_LIST_SELL) {
-        return await BookEntity.find({
+        let books = await BookEntity.find({
           where: { creator: { id: currentUserId } },
           relations: ['creator', 'favoriteCreators'],
         });
+        books = await this.toFilterBooks(books, filters);
+
+        return books;
       }
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
