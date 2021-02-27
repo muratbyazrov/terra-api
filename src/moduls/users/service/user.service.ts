@@ -1,19 +1,22 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '../entity/user.entity';
 import jwt = require('jsonwebtoken');
 import { AccessTokenEntity } from '../entity/access.token.entity';
 import { UpdateUserDto } from '../dto/update.user.dto';
 import { logger } from '../../logger/logger';
+import { REQUEST } from '@nestjs/core';
 
 @Injectable()
 export class UserService {
+  constructor(@Inject(REQUEST) private readonly request) {
+  }
 
   async find() {
     try {
       return UserEntity.find();
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, 400);
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -22,7 +25,7 @@ export class UserService {
       return await UserEntity.findOne(id);
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, 400);
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -31,11 +34,17 @@ export class UserService {
       return user.save();
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, 400);
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   async update(id: string, body: UpdateUserDto, avatar) {
+    const oldUser: UserEntity = await this.findOne(id);
+
+    if (oldUser.id !== this.request.session.user.id) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
     try {
       if (avatar) {
         const avatarObject = {
@@ -47,16 +56,22 @@ export class UserService {
       }
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, 400);
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   async delete(id: string) {
+    const oldUser: UserEntity = await this.findOne(id);
+
+    if (oldUser.id !== this.request.session.user.id) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
     try {
       return await UserEntity.delete(id);
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, 400);
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
