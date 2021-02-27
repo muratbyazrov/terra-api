@@ -25,8 +25,14 @@ export class BookController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async find(@Query('activeBookList') activeBookList): Promise<BookEntity[]> {
-    return this.bookService.find(activeBookList);
+  async find(
+    @Query('activeBookList') activeBookList: string,
+    @Query('price') price?: number,
+    @Query('town') town?: number,
+    @Query('genre') genre?: string
+  ): Promise<BookEntity[]> {
+
+    return this.bookService.find(activeBookList, {price, town, genre});
   }
 
   @Get(':id')

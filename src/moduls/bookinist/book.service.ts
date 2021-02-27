@@ -12,13 +12,25 @@ export class BookService {
   ) {
   }
 
-  async find(activeBookList) {
+  async find(activeBookList, filters) {
     const currentUserId = this.request.session.user.id;
     try {
       if (activeBookList === BookListNameEnum.BOOKINIST_LIST_BUY) {
-        const books = await BookEntity.find({
+        let books = await BookEntity.find({
           relations: ['creator', 'favoriteCreators'],
         });
+
+        if (filters && filters.town) {
+          books = books.filter(book => book.town === filters.town);
+        }
+
+        if (filters && filters.genre) {
+          books = books.filter(book => book.genre === filters.genre);
+        }
+
+        if (filters && filters.price) {
+          books = books.filter(book => book.price <= +filters.price);
+        }
 
         return books.filter(book => book.creator.id !== currentUserId);
       }
