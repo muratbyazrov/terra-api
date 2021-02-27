@@ -43,7 +43,9 @@ export class BookService {
 
   async findOne(id) {
     try {
-      return await BookEntity.findOne(id);
+      return await BookEntity.findOne(id, {
+        relations: ['creator', 'favoriteCreators'],
+      });
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
@@ -60,12 +62,8 @@ export class BookService {
   }
 
   async update(id, body) {
-    let oldBook: BookEntity;
+    const oldBook: BookEntity = await this.findOne(id);
     try {
-      oldBook = await BookEntity.findOne(id, {
-        relations: ['creator', 'favoriteCreators'],
-      });
-
       if (body.favoriteCreator) {
         const oldBookFavoriteCreatorsIds: number[] = oldBook.favoriteCreators.map(favoriteCreator => favoriteCreator.id);
         const currentUserId: number = this.request.session.user.id;
@@ -94,14 +92,7 @@ export class BookService {
   }
 
   async updateBookPhoto(id, bookPhoto) {
-    let oldBook: BookEntity;
-    try {
-      oldBook = await BookEntity.findOne(id, {
-        relations: ['creator'],
-      });
-    } catch (err) {
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-    }
+    const oldBook: BookEntity = await this.findOne(id);
 
     if (oldBook.creator.id !== this.request.session.user.id) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
@@ -115,14 +106,7 @@ export class BookService {
   }
 
   async delete(id) {
-    let oldBook: BookEntity;
-    try {
-      oldBook = await BookEntity.findOne(id, {
-        relations: ['creator'],
-      });
-    } catch (err) {
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-    }
+    const oldBook: BookEntity = await this.findOne(id);
 
     if (oldBook.creator.id !== this.request.session.user.id) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
