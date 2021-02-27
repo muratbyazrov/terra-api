@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AccessTokenEntity } from './access.token.entity';
-import { BookEntity } from '../../books/book.entity';
-import { MessageEntity } from '../../messages/message.entity';
+import { BookEntity } from '../../bookinist/book.entity';
+import { MessageEntity } from '../../messenger/message.entity';
 
 @Entity('user', {
   schema: 'security',

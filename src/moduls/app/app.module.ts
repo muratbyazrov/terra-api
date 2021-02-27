@@ -7,10 +7,10 @@ import { UserEntity } from '../users/entity/user.entity';
 import { UserModule } from '../users/user.module';
 import { AccessTokenEntity } from '../users/entity/access.token.entity';
 import { FilesModule } from '../files/files.module';
-import { BookEntity } from '../books/book.entity';
-import { BookModule } from '../books/book.module';
-import { MessageModule } from '../messages/message.module';
-import { MessageEntity } from '../messages/message.entity';
+import { BookEntity } from '../bookinist/book.entity';
+import { BookModule } from '../bookinist/book.module';
+import { MessageModule } from '../messenger/message.module';
+import { MessageEntity } from '../messenger/message.entity';
 
 @Module({
   imports: [
