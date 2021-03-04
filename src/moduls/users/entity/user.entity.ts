@@ -21,7 +21,8 @@ export class UserEntity extends BaseEntity {
 
   @Index('userEmailIndex', { unique: true })
   @Column('text', {
-    nullable: false,
+    nullable: true,
+    default: "Не указано"
   })
   email: string;
 
@@ -33,11 +34,13 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
+    default: "Не указано"
   })
   firstName: string;
 
   @Column('character varying', {
     nullable: true,
+    default: "Не указано"
   })
   lastName: string;
 
@@ -49,24 +52,25 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
+    default: "Не указано"
   })
   sex: string;
 
   @Column('character varying', {
     nullable: true,
-    default: 'Страна на Земле',
+    default: "Не указано"
   })
   country: string;
 
   @Column('character varying', {
     nullable: true,
-    default: 'Город на Земле',
+    default: "Не указано"
   })
   town: string;
 
   @Column('character varying', {
     nullable: true,
-    default: 'Какой-то адрес на Земле',
+    default: "Не указано"
   })
   address: string;
 
