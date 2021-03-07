@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../../guards/jwt.guard';
 import { PostService } from './post.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
@@ -13,14 +13,19 @@ export class PostController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async find() {
-    await this.postService.find();
+  async find(
+    @Query('postList') postList: string,
+  ) {
+    const filter = {
+      postList,
+    };
+    return await this.postService.find(filter);
   }
 
   @Get()
   @UseGuards(JwtGuard)
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    await this.postService.findOne(id);
+    return await this.postService.findOne(id);
   }
 
   @Post()

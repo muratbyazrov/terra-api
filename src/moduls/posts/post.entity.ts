@@ -51,6 +51,6 @@ export class PostEntity extends BaseEntity {
 
   @AfterLoad()
   likesIncrement() {
-    this.views = +1;
+    this.views = this.views + 1;
   }
 }

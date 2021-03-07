@@ -1,19 +1,28 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { PostEntity } from './post.entity';
+import { PostListEnum } from './post.list.enum';
 
 @Injectable()
 export class PostService {
   constructor(@Inject(REQUEST) private readonly request) {
   }
 
-  async find() {
+  async find(filter) {
+    let posts: PostEntity[];
+
     try {
-      return await PostEntity.find({
-        where: {
-          creator: { id: this.request.session.user.id },
-        },
-      });
+      if (filter.postList && filter.postList === PostListEnum.MY_POST_LIST) {
+        posts = await PostEntity.find({
+          where: {
+            creator: { id: this.request.session.user.id },
+          },
+        });
+      }
+
+      posts = await PostEntity.find();
+
+      return posts;
     } catch (e) {
       throw new BadRequestException('[PostService_find]', e.message);
     }
@@ -28,7 +37,7 @@ export class PostService {
   }
 
   async create(post) {
-    post.created = Date.now();
+    post.created = new Date();
     post.creator = this.request.session.user;
     try {
       return post.save();
