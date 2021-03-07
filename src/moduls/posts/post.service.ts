@@ -20,7 +20,9 @@ export class PostService {
         });
       }
 
-      posts = await PostEntity.find();
+      posts = await PostEntity.find({
+        relations: ['creator'],
+      });
 
       return posts;
     } catch (e) {

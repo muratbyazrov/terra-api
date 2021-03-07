@@ -15,4 +15,9 @@ export class FileService {
     res.set('Content-Type', 'image/png');
     await res.sendFile(path.join(__dirname, '../../../../uploads/books', `${fileName}`));
   }
+
+  async findPostPhoto(res, fileName) {
+    res.set('Content-Type', 'image/png');
+    await res.sendFile(path.join(__dirname, '../../../../uploads/posts', `${fileName}`));
+  }
 }

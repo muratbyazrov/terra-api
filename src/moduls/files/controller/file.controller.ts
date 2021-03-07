@@ -17,5 +17,8 @@ export class FileController {
     return this.fileService.getBookPhoto(res, fileName);
   }
 
-
+  @Get('post/:fileName')
+  findPostPhoto(@Res() res, @Param('fileName') fileName) {
+    return this.fileService.findPostPhoto(res, fileName);
+  }
 }
