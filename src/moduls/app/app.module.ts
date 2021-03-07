@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
-import { Connection } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserEntity } from '../users/entity/user.entity';
@@ -11,6 +10,8 @@ import { BookEntity } from '../bookinist/book.entity';
 import { BookModule } from '../bookinist/book.module';
 import { MessageModule } from '../messenger/message.module';
 import { MessageEntity } from '../messenger/message.entity';
+import { PostModule } from '../posts/post.module';
+import { PostEntity } from '../posts/post.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MessageEntity } from '../messenger/message.entity';
     FilesModule,
     BookModule,
     MessageModule,
+    PostModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return {
@@ -28,7 +30,7 @@ import { MessageEntity } from '../messenger/message.entity';
           username: 'postgres',
           password: 'byazrov127214315',
           database: 'terraDB',
-          entities: [UserEntity, AccessTokenEntity, BookEntity, MessageEntity],
+          entities: [UserEntity, AccessTokenEntity, BookEntity, MessageEntity, PostEntity],
           synchronize: true,
         };
       },
@@ -38,6 +40,4 @@ import { MessageEntity } from '../messenger/message.entity';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private connection: Connection) {
-  }
 }

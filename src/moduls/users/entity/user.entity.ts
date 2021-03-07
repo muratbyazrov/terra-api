@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinTable, ManyToMany, OneToMany, Pr
 import { AccessTokenEntity } from './access.token.entity';
 import { BookEntity } from '../../bookinist/book.entity';
 import { MessageEntity } from '../../messenger/message.entity';
+import { PostEntity } from '../../posts/post.entity';
 
 @Entity('user', {
   schema: 'security',
@@ -22,7 +23,7 @@ export class UserEntity extends BaseEntity {
   @Index('userEmailIndex', { unique: true })
   @Column('text', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   email: string;
 
@@ -34,13 +35,13 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   firstName: string;
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   lastName: string;
 
@@ -52,25 +53,25 @@ export class UserEntity extends BaseEntity {
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   sex: string;
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   country: string;
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   town: string;
 
   @Column('character varying', {
     nullable: true,
-    default: "Не указано"
+    default: 'Не указано',
   })
   address: string;
 
@@ -105,7 +106,10 @@ export class UserEntity extends BaseEntity {
   @OneToMany(() => MessageEntity, message => message.creator)
   message: MessageEntity[];
 
-@ManyToMany(() => BookEntity, (favoriteBooks) => favoriteBooks.favoriteCreators)
+  @OneToMany(() => PostEntity, post => post.creator)
+  posts: MessageEntity[];
+
+  @ManyToMany(() => BookEntity, (favoriteBooks) => favoriteBooks.favoriteCreators)
   @JoinTable({
     name: 'user_favorite_book',
     joinColumns: [

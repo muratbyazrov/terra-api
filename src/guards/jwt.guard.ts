@@ -17,7 +17,7 @@ export class JwtGuard implements CanActivate {
     });
     const currentTime = Math.floor(Date.now() / 1000);
 
-    request.session.user = token.user
+    request.session.user = token.user;
 
     return token && token.user && currentTime < token.expires;
 

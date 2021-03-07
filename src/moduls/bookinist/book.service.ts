@@ -24,7 +24,7 @@ export class BookService {
     if (filters && filters.price && filters.price !== 'null') {
       books = books.filter(book => book.price <= +filters.price);
     }
-    console.log(filters);
+
     return books;
   }
 
