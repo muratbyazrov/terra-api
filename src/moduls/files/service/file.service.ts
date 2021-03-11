@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as path from 'path';
+import { logger } from '../../logger/logger';
 
 @Injectable()
 export class FileService {
@@ -17,7 +18,13 @@ export class FileService {
   }
 
   async findPostPhoto(res, fileName) {
-    res.set('Content-Type', 'image/png');
-    await res.sendFile(path.join(__dirname, '../../../../uploads/posts', `${fileName}`));
+    try {
+      res.set('Content-Type', 'image/png');
+      await res.sendFile(path.join(__dirname, '../../../../uploads/posts', `${fileName}`));
+    } catch (err) {
+      logger.error(err);
+      throw new BadRequestException(err.message);
+    }
+
   }
 }

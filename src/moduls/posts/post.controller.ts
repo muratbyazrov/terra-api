@@ -1,10 +1,23 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query, UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtGuard } from '../../guards/jwt.guard';
 import { PostService } from './post.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { PostEntity } from './post.entity';
 import { PostUpdateDto } from './post.update.dto';
 import { PostCreateDto } from './post.create.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostController {
@@ -38,6 +51,16 @@ export class PostController {
   @UseGuards(JwtGuard)
   async update(@Param('id') id: number, @Body() body: PostUpdateDto): Promise<UpdateResult> {
     return await this.postService.update(id, body);
+  }
+
+  @Put('photo/save')
+  @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor('postPhoto', {
+    dest: 'uploads/posts',
+    preservePath: true,
+  }))
+  async savePhoto(@UploadedFile() postPhoto): Promise<UpdateResult> {
+    return await postPhoto;
   }
 
   @Delete(':id')
