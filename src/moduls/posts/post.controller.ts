@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { JwtGuard } from '../../guards/jwt.guard';
 import { PostService } from './post.service';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { UpdateResult } from 'typeorm';
 import { PostEntity } from './post.entity';
 import { PostUpdateDto } from './post.update.dto';
 import { PostCreateDto } from './post.create.dto';
@@ -49,8 +49,8 @@ export class PostController {
 
   @Put(':id')
   @UseGuards(JwtGuard)
-  async update(@Param('id') id: number, @Body() body: PostUpdateDto): Promise<UpdateResult> {
-    return await this.postService.update(id, body);
+  async update(@Param('id') id: number, @Body() body: PostUpdateDto) {
+    await this.postService.update(id, body);
   }
 
   @Put('photo/save')
@@ -65,8 +65,8 @@ export class PostController {
 
   @Delete(':id')
   @UseGuards(JwtGuard)
-  async delete(@Param('id') id: number): Promise<DeleteResult> {
-    return this.postService.delete(id);
+  async delete(@Param('id') id: number) {
+    await this.postService.delete(id);
   }
 
 }

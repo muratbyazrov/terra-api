@@ -2,6 +2,8 @@ import { BadRequestException, ForbiddenException, Inject, Injectable } from '@ne
 import { REQUEST } from '@nestjs/core';
 import { PostEntity } from './post.entity';
 import { PostListEnum } from './post.list.enum';
+import * as moment from 'moment';
+import { logger } from '../logger/logger';
 
 @Injectable()
 export class PostService {
@@ -24,8 +26,23 @@ export class PostService {
         relations: ['creator'],
       });
 
+      posts.sort((a, b) => {
+        if (moment(a.created).isBefore(b.created)) {
+          return 1;
+        }
+
+        if (moment(a.created).isAfter(b.created)) {
+          return -1;
+        }
+
+        if (moment(a.created).isSame(b.created)) {
+          return 0;
+        }
+      });
+
       return posts;
     } catch (e) {
+      logger.error(e);
       throw new BadRequestException('[PostService_find]', e.message);
     }
   }
@@ -34,6 +51,7 @@ export class PostService {
     try {
       return await PostEntity.findOne(id);
     } catch (e) {
+      logger.error(e);
       throw new BadRequestException('[PostService_findOne]', e.message);
     }
   }
@@ -44,6 +62,7 @@ export class PostService {
     try {
       return post.save();
     } catch (e) {
+      logger.error(e);
       throw new BadRequestException('[PostService_findOne]', e.message);
     }
   }
@@ -55,7 +74,12 @@ export class PostService {
       throw new ForbiddenException('Недостаточно прав на удадение книги');
     }
 
-    return await PostEntity.update(id, body);
+    try {
+      await PostEntity.update(id, body);
+    } catch (e) {
+      logger.error(e);
+      throw new BadRequestException('[PostService_update]', e.message);
+    }
   }
 
   async delete(id) {
@@ -65,6 +89,11 @@ export class PostService {
       throw new ForbiddenException('Недостаточно прав на удадение книги');
     }
 
-    return await PostEntity.delete(id);
+    try {
+      await PostEntity.delete(id);
+    } catch (e) {
+      logger.error(e);
+      throw new BadRequestException('[PostService_update]', e.message);
+    }
   }
 }

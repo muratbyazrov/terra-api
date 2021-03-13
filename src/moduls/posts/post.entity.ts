@@ -46,7 +46,7 @@ export class PostEntity extends BaseEntity {
   })
   creator: UserEntity;
 
-  @Column('date')
+  @Column('timestamp without time zone')
   created: Date;
 
   @AfterLoad()
