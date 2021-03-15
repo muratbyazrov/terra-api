@@ -28,10 +28,11 @@ export class PostController {
   @UseGuards(JwtGuard)
   async find(
     @Query('postList') postList: string,
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('offset', ParseIntPipe) offset: number,
   ) {
-    const filter = {
-      postList,
-    };
+    const filter = { postList, limit, offset };
+
     return await this.postService.find(filter);
   }
 

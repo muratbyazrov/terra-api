@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 
-import { FileService } from '../service/file.service';
+import { FileService } from './file.service';
 
 @Controller('file')
 export class FileController {
@@ -14,7 +14,7 @@ export class FileController {
 
   @Get('bookPhoto/:fileName')
   getBookPhoto(@Res() res, @Param('fileName') fileName) {
-    return this.fileService.getBookPhoto(res, fileName);
+    return this.fileService.findBookPhoto(res, fileName);
   }
 
   @Get('post/:fileName')

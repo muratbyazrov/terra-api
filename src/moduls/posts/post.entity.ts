@@ -1,4 +1,4 @@
-import { AfterLoad, BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../users/entity/user.entity';
 
 @Entity('post', {
@@ -48,9 +48,4 @@ export class PostEntity extends BaseEntity {
 
   @Column('timestamp without time zone')
   created: Date;
-
-  @AfterLoad()
-  likesIncrement() {
-    this.views = this.views + 1;
-  }
 }

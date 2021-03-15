@@ -4,6 +4,7 @@ import { PostEntity } from './post.entity';
 import { PostListEnum } from './post.list.enum';
 import * as moment from 'moment';
 import { logger } from '../logger/logger';
+import { getConnection } from 'typeorm';
 
 @Injectable()
 export class PostService {
@@ -40,7 +41,22 @@ export class PostService {
         }
       });
 
-      return posts;
+      const resultPostIds = posts
+        .filter(post => post.creator.id !== this.request.session.user.id)
+        .map(el => el.id).join();
+
+      if (resultPostIds.length > 0) {
+        await getConnection()
+          .createQueryBuilder()
+          .update(PostEntity)
+          .set({
+            views: () => 'views +1',
+          })
+          .where(`id IN (${resultPostIds})`)
+          .execute();
+      }
+
+      return posts.slice(filter.offset, filter.limit + filter.offset);
     } catch (e) {
       logger.error(e);
       throw new BadRequestException('[PostService_find]', e.message);
