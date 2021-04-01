@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
+  Delete, ForbiddenException,
+  Get, Inject,
   Param,
   ParseIntPipe,
   Post,
@@ -18,11 +18,16 @@ import { PostEntity } from './post.entity';
 import { PostUpdateDto } from './post.update.dto';
 import { PostCreateDto } from './post.create.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { REQUEST } from '@nestjs/core';
 
 @Controller('posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {
+  constructor(
+    private readonly postService: PostService,
+    @Inject(REQUEST) private readonly request,
+  ) {
   }
+
 
   @Get()
   @UseGuards(JwtGuard)
@@ -66,7 +71,13 @@ export class PostController {
 
   @Delete(':id')
   @UseGuards(JwtGuard)
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', new ParseIntPipe()) id: number) {
+    const deletedPost = await this.findOne(id);
+
+    if (deletedPost.creator.id !== this.request.session.user.id) {
+      throw new ForbiddenException('Недостаточно прав');
+    }
+
     await this.postService.delete(id);
   }
 

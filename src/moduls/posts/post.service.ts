@@ -65,7 +65,7 @@ export class PostService {
 
   async findOne(id) {
     try {
-      return await PostEntity.findOne(id);
+      return await PostEntity.findOne(id, { relations: ['creator'] });
     } catch (e) {
       logger.error(e);
       throw new BadRequestException('[PostService_findOne]', e.message);
@@ -99,11 +99,7 @@ export class PostService {
   }
 
   async delete(id) {
-    const deletedPost = await this.findOne(id);
 
-    if (deletedPost.creator.id !== this.request.session.user.id) {
-      throw new ForbiddenException('Недостаточно прав на удадение книги');
-    }
 
     try {
       await PostEntity.delete(id);
