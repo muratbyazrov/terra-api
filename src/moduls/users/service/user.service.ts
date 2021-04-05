@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException, ForbiddenException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserEntity } from '../entity/user.entity';
 import jwt = require('jsonwebtoken');
 import { AccessTokenEntity } from '../entity/access.token.entity';
@@ -11,12 +16,12 @@ export class UserService {
   constructor(@Inject(REQUEST) private readonly request) {
   }
 
-  async find() {
+  async find(filter) {
     try {
-      return UserEntity.find();
+      return await UserEntity.query(`SELECT * FROM security."user" LIMIT ${filter.limit} OFFSET ${filter.offset}`);
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(err.message);
     }
   }
 
@@ -25,7 +30,7 @@ export class UserService {
       return await UserEntity.findOne(id);
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(err.message);
     }
   }
 
@@ -34,7 +39,7 @@ export class UserService {
       return user.save();
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(err.message);
     }
   }
 
@@ -42,7 +47,7 @@ export class UserService {
     const oldUser: UserEntity = await this.findOne(id);
 
     if (oldUser.id !== this.request.session.user.id) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('Недостаточно прав');
     }
 
     try {
@@ -56,7 +61,7 @@ export class UserService {
       }
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(err.message);
     }
   }
 
@@ -64,14 +69,14 @@ export class UserService {
     const oldUser: UserEntity = await this.findOne(id);
 
     if (oldUser.id !== this.request.session.user.id) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      throw new BadRequestException('Forbidden');
     }
 
     try {
       return await UserEntity.delete(id);
     } catch (err) {
       logger.error(err);
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(err.message);
     }
   }
 
@@ -111,5 +116,4 @@ export class UserService {
 
     return { user, token: result.token };
   }
-
 }

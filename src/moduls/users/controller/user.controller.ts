@@ -4,9 +4,9 @@ import {
   Delete,
   Get,
   Headers,
-  Param,
+  Param, ParseIntPipe,
   Post,
-  Put, Request,
+  Put, Query, Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -21,15 +21,19 @@ import jwt = require('jsonwebtoken');
 import { UpdateUserDto } from '../dto/update.user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {
   }
 
   @Get()
   @UseGuards(JwtGuard)
-  async find(): Promise<UserEntity[]> {
-    return this.userService.find();
+  async find(
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('offset', ParseIntPipe) offset: number,
+  ): Promise<UserEntity[]> {
+    const filter = {limit, offset}
+    return this.userService.find(filter);
   }
 
   @Get('me')
